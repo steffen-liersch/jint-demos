@@ -14,7 +14,7 @@
 //----------------------------------------------------------------------------
 
 /*
- * This project demonstrates an issue with JsValue.ToObject.
+ * This project demonstrates an issue with function JsValue.ToObject.
  * It causes a StackOverflowException for objects with circular references.
  * 
  * Jint 2.11.10        : fails
@@ -23,6 +23,7 @@
 
 using System;
 using Jint;
+using Jint.Native;
 using Jint.Runtime.Interop;
 
 namespace JintDemo
@@ -37,6 +38,9 @@ namespace JintDemo
 
       engine.Global.FastAddProperty("global", engine.Global, true, true, true);
       engine.Global.FastAddProperty("test", new DelegateWrapper(engine, (Action<string, object>)Test), true, true, true);
+
+      //JsValue v=engine.Global;
+      //v.ToObject(); // Causes a StackOverflowException
 
       engine.Execute(@"
 var demo={};
